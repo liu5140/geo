@@ -22,6 +22,6 @@ func (service TableService) genModel(entityTable model.GeoTable) (err error) {
 }
 
 
- template.New("model.html") 这个new里面的东西，要和ParseFiles("geo/template/model.html") 后面的一致才好，不然会报错误
+ template.New("model.html") 这个new里面的东西，要和ParseFiles("geo/template/model.html") 后面的一致才好，不然会报错误（template: "defaultModel" is an incomplete or empty template）
  
  
