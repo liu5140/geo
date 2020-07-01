@@ -1,0 +1,28 @@
+// ==========================================================================
+// 生成日期：{{.table.CreatedAt}}
+// 生成路径: app/model/{{.table.ModuleName}}/{{.table.BusinessName}}/{{.table.BusinessName}}_entity.go
+// 生成人：{{.table.FunctionAuthor}}
+// ==========================================================================
+
+package dao
+
+import (
+	"errors"
+	"{{.table.PackageName}}/data/model"
+)
+
+func (dao *{{.table.BusinessName}}Dao) Search{{.table.BusinessName}}s(condition *model.{{.table.BusinessName}}SearchCondition, rowbound *model.RowBound) (result []model.{{.table.BusinessName}}, count int, err error) {
+	db := dao.db
+	if len(condition.UserIDs) > 0 {
+		db = db.Where("id in (?) ", condition.UserIDs)
+	}
+
+	if rowbound == nil {
+		err = db.Model(&model.{{.table.BusinessName}}{}).Order("ID desc").Count(&count).Find(&result).Error
+	} else {
+		err = db.Model(&model.{{.table.BusinessName}}{}).Order("ID desc").Count(&count).Offset(rowbound.Offset).Limit(rowbound.Limit).Find(&result).Error
+	}
+
+	return result, count, err
+
+}

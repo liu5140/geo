@@ -1,0 +1,25 @@
+// ==========================================================================
+// 生成日期：{{.table.CreatedAt}}
+// 生成路径: app/model/{{.table.ModuleName}}/{{.table.BusinessName}}/{{.table.BusinessName}}_entity.go
+// 生成人：{{.table.FunctionAuthor}}
+// ==========================================================================
+
+package model
+
+import (
+	"time"
+)
+
+// {{.table.BusinessName}} is the golang structure for table {{.table.TableName}}.
+type {{.table.BusinessName}} struct { {{range $index, $column := .table.GeoTableColumns}}
+	// {{$column.ColumnComment}}
+	{{if eq $column.IsPk "1"}} {{$column.GoField}}  {{if eq $column.GoType "Time"}}*time.Time{{else}}{{$column.GoType}}{{end}}   `gorm:"{{$column.ColumnName}},primary" json:"{{$column.ColumnName}}"`{{else}} {{$column.GoField}} {{if eq $column.GoType "Time"}}*time.Time{{else}}{{$column.GoType}}{{end}}      `gorm:"{{$column.ColumnName}}" json:"{{$column.ColumnName}}"`{{end}}{{end}}
+}
+
+func (model {{.table.BusinessName}}) TableName() string {
+	return "{{.table.TableName}}"
+}
+
+type {{.table.BusinessName}}SearchCondition struct { {{range $index, $column := .table.GeoTableColumns}}
+	{{if ne $column.IsPk "1"}} {{if ne $column.GoType "Time"}} {{$column.GoField}}  {{$column.GoType}} // {{$column.ColumnComment}}{{end}} {{end}} {{end}}
+}

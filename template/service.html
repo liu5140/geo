@@ -1,0 +1,54 @@
+package service
+
+import (
+	"errors"
+	"{{.table.PackageName}}/data/model"
+	"{{.table.PackageName}}/shadow-framework/orm/datasource"
+)
+
+type {{.table.BusinessName}}Service struct {
+}
+
+var {{.table.ClassName}}Service *{{.table.BusinessName}}Service
+
+func New{{.table.BusinessName}}Service() *{{.table.BusinessName}}Service {
+	if {{.table.ClassName}}Service == nil {
+		l.Lock()
+			{{.table.ClassName}}Service = &{{.table.BusinessName}}Service{}
+		l.Unlock()
+	}
+	return {{.table.ClassName}}Service
+}
+
+func (service {{.table.BusinessName}}Service) Search{{.table.BusinessName}}Paging(condition *model.{{.table.BusinessName}}SearchCondition, pageNum int, pageSize int) (request []model.{{.table.BusinessName}}, count int, err error) {
+	rowbound := model.NewRowBound(pageNum, pageSize)
+	return service.search{{.table.BusinessName}}(condition, &rowbound)
+}
+
+func (service {{.table.BusinessName}}Service) Search{{.table.BusinessName}}OutPaging(condition *model.{{.table.BusinessName}}SearchCondition) (request []model.{{.table.BusinessName}}, count int, err error) {
+	return service.search{{.table.BusinessName}}(condition, nil)
+}
+
+func (service {{.table.BusinessName}}Service) search{{.table.BusinessName}}(condition *model.{{.table.BusinessName}}SearchCondition, rowbound *model.RowBound) (request []model.{{.table.BusinessName}}, count int, err error) {
+	db := datasource.DatasourceManagerInstance(datasource.DATASOURCE_MANAGER).Datasource()
+	messageDao := dao.New{{.table.BusinessName}}Dao(db)
+	request, count, err = messageDao.Seach{{.table.BusinessName}}(condition, rowbound)
+	if err != nil {
+		Log.Error(err)
+		return nil, 0, err
+	}
+	return request, count, nil
+}
+
+func (service {{.table.BusinessName}}Service) Delete{{.table.BusinessName}}(id int64) (err error) {
+	db := datasource.DatasourceManagerInstance(datasource.DATASOURCE_MANAGER).Datasource()
+	messageDao := dao.New{{.table.BusinessName}}Dao(db)
+	return messageDao.Delete(&model.{{.table.BusinessName}}{ID: id})
+}
+
+
+func (service {{.table.BusinessName}}Service) Create{{.table.BusinessName}}(m *model.{{.table.BusinessName}}) (err error) {
+	db := datasource.DatasourceManagerInstance(datasource.DATASOURCE_MANAGER).Datasource()
+	messageDao := dao.New{{.table.BusinessName}}Dao(db)
+	return messageDao.Create(m)
+}

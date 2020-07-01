@@ -1,0 +1,29 @@
+[90m[2020-07-01 14:50:37.340][0m [32m INFO[0m logger init (logger.InitLog:logger.go:55)
+[90m[2020-07-01 14:50:37.358][0m [32m INFO[0m ServerConfigure init  (server.init.0:init.go:16)
+[90m[2020-07-01 14:50:37.359][0m [32m INFO[0m GormDataSourceManager init  (datasourcemanager.init.0:init.go:17)
+[90m[2020-07-01 14:50:37.359][0m [31mERROR[0m server configure init failed, file doesn't exist [31mfile[0m=config/server.json [31m~LineNum[0m= (server.LoadWithFile:server_configure_manager.go:63)
+[90m[2020-07-01 14:50:37.359][0m [31mPANIC[0m open config/server.json: The system cannot find the path specified. (server.LoadWithFile:server_configure_manager.go:64)
+goroutine 1 [running]:
+runtime/debug.Stack(0x7d2b00, 0xc0002989e0, 0x1)
+	c:/go/src/runtime/debug/stack.go:24 +0xa4
+ds_test/shadow-framework/logger.(*Logger).logErrorPrint(0xc000006c30, 0xc0000879f0, 0xc000087a80, 0x1, 0x1)
+	C:/Users/user/go/src/ds_test/shadow-framework/logger/logger.go:189 +0x13a
+ds_test/shadow-framework/logger.(*Logger).Panic(0xc000006c30, 0xc000087a80, 0x1, 0x1)
+	C:/Users/user/go/src/ds_test/shadow-framework/logger/logger.go:250 +0x76
+ds_test/shadow-framework/server.LoadWithFile(0x7d4680, 0xc000294400, 0x843413, 0x12)
+	C:/Users/user/go/src/ds_test/shadow-framework/server/server_configure_manager.go:64 +0x333
+ds_test/shadow-framework/server.newServerConfigure(0xc00029a270, 0x20)
+	C:/Users/user/go/src/ds_test/shadow-framework/server/server_configure_manager.go:44 +0xb3
+ds_test/shadow-framework/server.newDataSourceConfigure(0x7d9ae0, 0xc000140e10, 0x843b9d)
+	C:/Users/user/go/src/ds_test/shadow-framework/server/server_configure_manager.go:57 +0x29
+ds_test/shadow-framework/orm/datasource.DataSourceConfigureInstance(...)
+	C:/Users/user/go/src/ds_test/shadow-framework/orm/datasource/datasource_configure.go:26
+ds_test/shadow-framework/orm/datasource/datasourcemanager.(*TGormDataSourceManager).Master(0xc0002a0370, 0x0)
+	C:/Users/user/go/src/ds_test/shadow-framework/orm/datasource/datasourcemanager/gorm_datasource_manager.go:99 +0x15c
+ds_test/shadow-framework/orm/datasource/datasourcemanager.(*TGormDataSourceManager).Datasource(0xc0002a0370, 0xc0002a0370)
+	C:/Users/user/go/src/ds_test/shadow-framework/orm/datasource/datasourcemanager/gorm_datasource_manager.go:68 +0x32
+ds_test/geo/service.TableService.GenCode(0x35, 0xc00028e6e0, 0x2)
+	C:/Users/user/go/src/ds_test/geo/service/table_service.go:67 +0x8a
+main.main()
+	C:/Users/user/go/src/ds_test/geo/main.go:28 +0x13c
+

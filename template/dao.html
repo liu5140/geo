@@ -1,0 +1,126 @@
+// ==========================================================================
+// 生成日期：{{.table.CreatedAt}}
+// 生成路径: app/model/{{.table.ModuleName}}/{{.table.BusinessName}}/{{.table.BusinessName}}_entity.go
+// 生成人：{{.table.FunctionAuthor}}
+// ==========================================================================
+
+package dao
+
+import (
+	"errors"
+	"{{.table.PackageName}}/data/model"
+	"github.com/shopspring/decimal"
+	"{{.table.PackageName}}/shadow-framework/orm/jinzhu/gorm"
+)
+
+type {{.table.BusinessName}}Dao struct {
+	db *gorm.DB
+}
+
+func New{{.table.BusinessName}}Dao(db *gorm.DB) *{{.table.BusinessName}}Dao {
+	return &{{.table.BusinessName}}Dao{
+		db: db,
+	}
+}
+
+func (dao *{{.table.BusinessName}}Dao) Create(m *model.{{.table.BusinessName}}) error {
+	return dao.db.Create(m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) Find(m *model.{{.table.BusinessName}}) (result []model.{{.table.BusinessName}}, err error) {
+	err = dao.db.Find(&result, m).Error
+	return
+}
+
+func (dao *{{.table.BusinessName}}Dao) FindOne(m *model.{{.table.BusinessName}}) error {
+	return dao.db.First(m, m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) FindLast(m *model.{{.table.BusinessName}}) error {
+	return dao.db.Last(m, m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) FindPage(m *model.{{.table.BusinessName}}, rowbound model.RowBound, desc bool)  (result []model.{{.table.BusinessName}}, count int, err error)  {
+	db := dao.db
+	if desc {
+		db = db.Order("id desc")
+	}
+	err = db.Model(m).Count(&count).Limit(rowbound.Limit).Offset(rowbound.Offset).Find(&result, m).Error
+	return
+}
+
+func (dao *{{.table.BusinessName}}Dao) Get(m *model.{{.table.BusinessName}}) error {
+	if dao.db.NewRecord(m) {
+		return errors.New("id is nil")
+	}
+	return dao.db.Find(m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) BatchGet(idbatch []int64) (result []model.{{.table.BusinessName}}, err error) {
+	if len(idbatch) == 0 {
+		return nil, errors.New("id is nil")
+	}
+	err = dao.db.Model(&model.{{.table.BusinessName}}{}).Where("ID in (?)", idbatch).Find(&result).Error
+	return
+}
+
+func (dao *{{.table.BusinessName}}Dao) GetForUpdate(m *model.{{.table.BusinessName}}) error {
+	if dao.db.NewRecord(m) {
+		return errors.New("id is nil")
+	}
+	return dao.db.Set("gorm:query_option", "FOR UPDATE").Find(m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) Save(m *model.{{.table.BusinessName}}) error {
+	return dao.db.Save(m).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) Delete(m *model.{{.table.BusinessName}}) error {
+	if dao.db.NewRecord(m) {
+		return errors.New("id is nil")
+	}
+	{{if CheckField .table.GeoTableColumns "deleted_at"}}return dao.db.Unscoped().Delete(m).Error
+	{{else}}return dao.db.Delete(m).Error{{end}}
+}
+
+{{if CheckField .table.GeoTableColumns "deleted_at"}}func (dao *{{.table.BusinessName}}Dao) SoftDelete(m *model.{{.table.BusinessName}}) error {
+	if dao.db.NewRecord(m) {
+		return errors.New("id is nil")
+	}
+	return dao.db.Delete(m).Error
+}{{end}}
+
+func (dao *{{.table.BusinessName}}Dao) BatchDelete(idbatch []int64) error {
+	if len(idbatch) == 0 {
+		return errors.New("id is nil")
+	}
+	{{if CheckField .table.GeoTableColumns "deleted_at"}}return dao.db.Unscoped().Where("ID in (?)", idbatch).Delete(&model.{{.table.BusinessName}}{}).Error
+	{{else}}return dao.db.Where("ID in (?)", idbatch).Delete(&model.{{.table.BusinessName}}{}).Error{{end}}
+}
+
+{{if CheckField .table.GeoTableColumns "deleted_at"}}func (dao *{{.table.BusinessName}}Dao) SoftBatchDelete(idbatch []int64) error {
+	if len(idbatch) == 0 {
+		return errors.New("id is nil")
+	}
+	return dao.db.Where("ID in (?)", idbatch).Delete(&model.{{.table.BusinessName}}{}).Error
+}{{end}}
+
+func (dao *{{.table.BusinessName}}Dao) Updates(id int64, attrs map[string]interface{}) error {
+	return dao.db.Model(&model.{{.table.BusinessName}}{}).Where("ID = ?", id).Updates(attrs).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) Update(id int64, attr string, value interface{}) error {
+	return dao.db.Model(&model.{{.table.BusinessName}}{}).Where("ID = ?", id).Update(attr, value).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) BatchUpdaterAttrs(idbatch []int64, attrs map[string]interface{}) error {
+	if len(idbatch) == 0 {
+		return errors.New("id is nil")
+	}
+	return dao.db.Model(&model.{{.table.BusinessName}}{}).Where("ID in (?)", idbatch).Updates(attrs).Error
+}
+
+func (dao *{{.table.BusinessName}}Dao) Found(m *model.{{.table.BusinessName}}) bool {
+	find := dao.db.First(m, m).RecordNotFound()
+	return !find
+}
